@@ -1,0 +1,52 @@
+package com.pages;
+
+import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.Page;
+import com.pages.help.HelpPage;
+import io.qameta.allure.Step;
+import static com.utils.BasePageFactory.openPage;
+
+public class MainPage extends BasePage {
+
+    // Локаторы (инициализируем в конструкторе)
+    private final Locator ecoBonuses;             // отображение экобонусов
+    private final Locator buttonHelp;             // кнопка "Помощь"
+    private final Locator buttonServices;         // кнопка "Услуги"
+    private final Locator buttonMyApplications;   // кнопка "Мои заявки"
+
+    public MainPage(Page page) {
+        super(page);
+        this.ecoBonuses = page.locator("text='Экобонусы'");
+        this.buttonHelp = page.locator("text='Помощь'");
+        this.buttonServices = page.locator("//div[@class='MuiBox-root css-j7qwjs']//p[text()='Услуги']");
+        this.buttonMyApplications = page.locator("text='Мои заявки'");
+    }
+
+    @Override
+    @Step("МиниАпп 'Услуги' отображается")
+    public boolean isPageLoaded() {
+
+        String locatorName = "Пусто";
+        // Ждем появления кнопок (с таймаутом 10 секунд)
+        try {
+            locatorName = "ecoBonuses";
+            ecoBonuses.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            locatorName = "buttonHelp";
+            buttonHelp.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            locatorName = "buttonServices";
+            buttonServices.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            locatorName = "buttonMyApplications";
+            buttonMyApplications.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+
+            return true; // если исключения не было, элемент найден
+        } catch (Exception e) {
+            System.out.println("Элемент не найден: " + locatorName);
+            return false; // элемент не найден за 10 секунд
+        }
+    }
+
+    @Step("Открываем блок 'Помощь'")
+    public HelpPage tapToHelp() {
+        return openPage(buttonHelp, page, HelpPage.class);
+    }
+}
