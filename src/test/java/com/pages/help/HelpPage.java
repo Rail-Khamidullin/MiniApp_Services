@@ -2,6 +2,7 @@ package com.pages.help;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.TimeoutError;
 import com.pages.BasePage;
 import io.qameta.allure.Step;
 
@@ -43,18 +44,32 @@ public class HelpPage extends BasePage {
         } catch (Exception e) {
             System.out.println("Элемент не найден: " + locatorName);
             // скриншот, в случае падения теста
-            page.screenshot(new Page.ScreenshotOptions().setPath(Paths.get("auth1.png")));
+            page.screenshot(new Page.ScreenshotOptions().setPath(Paths.get("screenshots/HelpPage/'" + locatorName + "'error.png")));
             return false; // элемент не найден за 10 секунд
         }
     }
 
     // класс "Часто задаваемые вопросы"
     public AskedQuestionsPage openAskedQuestions() {
-        return openPage(askedQuestions, page, AskedQuestionsPage.class);
+        try {
+            return openPage(askedQuestions, page, AskedQuestionsPage.class);
+        } catch (
+                TimeoutError e) {
+            System.out.println("Элемент 'Часто задаваемые вопросы' не найден на главной странице");
+            page.screenshot(new Page.ScreenshotOptions().setPath(Paths.get("screenshots/HelpPage/openAskedQuestions_error.png")));
+            throw new AssertionError("Не удалось открыть страницу Часто задаваемые вопросы", e);
+        }
     }
 
-    // класс "Часто задаваемые вопросы"
+    // класс "О приложении"
     public AboutAppPage openAboutApp() {
-        return openPage(aboutApp, page, AboutAppPage.class);
+        try {
+            return openPage(aboutApp, page, AboutAppPage.class);
+        } catch (
+                TimeoutError e) {
+            System.out.println("Элемент 'О приложении' не найден на главной странице");
+            page.screenshot(new Page.ScreenshotOptions().setPath(Paths.get("screenshots/HelpPage/openAboutApp_error.png")));
+            throw new AssertionError("Не удалось открыть страницу О приложении", e);
+        }
     }
 }

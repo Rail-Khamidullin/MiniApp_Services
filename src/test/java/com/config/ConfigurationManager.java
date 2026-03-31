@@ -16,7 +16,7 @@ public class ConfigurationManager {
     }
 
     public static int getTimeout() {
-        return Integer.parseInt(CONFIG.getProperty("timeout", "30000"));
+        return Integer.parseInt(CONFIG.getProperty("timeout", "10000"));
     }
 
     public static int getSlowMotion() {

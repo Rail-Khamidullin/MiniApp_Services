@@ -2,8 +2,11 @@ package com.pages;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.TimeoutError;
 import com.pages.help.HelpPage;
+import com.pages.services.ServicesPage;
 import io.qameta.allure.Step;
+
 import static com.utils.BasePageFactory.openPage;
 
 public class MainPage extends BasePage {
@@ -39,14 +42,22 @@ public class MainPage extends BasePage {
             buttonMyApplications.waitFor(new Locator.WaitForOptions().setTimeout(10000));
 
             return true; // если исключения не было, элемент найден
-        } catch (Exception e) {
+        } catch (TimeoutError e) {
             System.out.println("Элемент не найден: " + locatorName);
-            return false; // элемент не найден за 10 секунд
+            return false;
+        } catch (Exception e) {
+            System.out.println("Другая ошибка для элемента " + locatorName + ": " + e.getMessage());
+            return false;
         }
     }
 
     @Step("Открываем блок 'Помощь'")
     public HelpPage tapToHelp() {
         return openPage(buttonHelp, page, HelpPage.class);
+    }
+
+    @Step("Открываем блок 'Услуги'")
+    public ServicesPage tapToServices() {
+        return openPage(buttonServices, page, ServicesPage.class);
     }
 }

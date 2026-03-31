@@ -26,7 +26,7 @@ public class Configuration {
     private static void setDefaultProperties() {
         props.setProperty("browser", "chromium");
         props.setProperty("headless", "false");
-        props.setProperty("timeout", "30000");
+        props.setProperty("timeout", "10000");
     }
 
     public static String getBrowser() {
