@@ -34,4 +34,5 @@ public class TextHelpWindow {
     //   --- О приложении ---
     public static final String MANUAL_FILE = "Руководство пользователя";
     public static final String AGREEMENT_FILE = "Согласие на обработку ПД";
+    public static final String ECOBONUS_OFFER = " Оферта Экобонусы";
 }

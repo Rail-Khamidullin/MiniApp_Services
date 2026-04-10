@@ -66,6 +66,13 @@
             <version>1.18.34</version>
             <scope>provided</scope>
         </dependency>
+
+
+        <dependency>
+            <groupId>com.microsoft.playwright</groupId>
+            <artifactId>playwright</artifactId>
+            <version>1.48.0</version> <!-- Используйте последнюю стабильную версию -->
+        </dependency>
     </dependencies>
 
     <build>

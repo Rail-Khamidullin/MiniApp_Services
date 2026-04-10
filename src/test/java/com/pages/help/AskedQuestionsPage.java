@@ -79,11 +79,11 @@ public class AskedQuestionsPage extends BasePage {
     }
 
     private boolean checkWorkQuestionBlocks(Locator nameQuestion, Locator textDescription, String textExpend) {
-        if("false".equals(nameQuestion.getAttribute("aria-expanded"))) {
+        if ("false".equals(nameQuestion.getAttribute("aria-expanded"))) {
             nameQuestion.click();
             String currentText = textDescription.textContent();
             System.out.println(currentText);
-            if(!currentText.equals(textExpend)) {
+            if (!currentText.equals(textExpend)) {
                 page.screenshot(new Page.ScreenshotOptions().setPath(Paths.get("screenshots/AskedQuestionsPage/questionText.png")));
             }
             assertEquals(currentText, textExpend, "Текст не соответствует требованиям");

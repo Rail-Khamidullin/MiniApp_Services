@@ -16,6 +16,7 @@ public class MainPage extends BasePage {
     private final Locator buttonHelp;             // кнопка "Помощь"
     private final Locator buttonServices;         // кнопка "Услуги"
     private final Locator buttonMyApplications;   // кнопка "Мои заявки"
+    private final Locator currentBonuses;
 
     public MainPage(Page page) {
         super(page);
@@ -23,6 +24,7 @@ public class MainPage extends BasePage {
         this.buttonHelp = page.locator("text='Помощь'");
         this.buttonServices = page.locator("//div[@class='MuiBox-root css-j7qwjs']//p[text()='Услуги']");
         this.buttonMyApplications = page.locator("text='Мои заявки'");
+        this.currentBonuses = page.locator("//div[@class = 'css-3v2363']");
     }
 
     @Override
@@ -40,6 +42,8 @@ public class MainPage extends BasePage {
             buttonServices.waitFor(new Locator.WaitForOptions().setTimeout(10000));
             locatorName = "buttonMyApplications";
             buttonMyApplications.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            locatorName = "quantityBonus";
+            currentBonuses.waitFor(new Locator.WaitForOptions().setTimeout(10000));
 
             return true; // если исключения не было, элемент найден
         } catch (TimeoutError e) {
@@ -59,5 +63,11 @@ public class MainPage extends BasePage {
     @Step("Открываем блок 'Услуги'")
     public ServicesPage tapToServices() {
         return openPage(buttonServices, page, ServicesPage.class);
+    }
+
+    @Step("Фиксируаем текущее кол-во бонусов")
+    public int getCurrentBonuses() {
+        currentBonuses.textContent();
+        return 0;
     }
 }

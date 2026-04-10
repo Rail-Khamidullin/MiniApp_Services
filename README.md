@@ -6,7 +6,6 @@ MiniApp_Services
 
 junit 5.10.0
 playwright 1.40.0
-rest assured 5.4.0
 java 17
 maven 4.0.0
 lombok 1.18.34

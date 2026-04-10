@@ -13,7 +13,7 @@ public abstract class BasePage {
     }
 
     public Locator nameLocator(String name) {
-        return page.locator("text='"+ name +"'");
+        return page.locator("text='" + name + "'");
     }
 
     // Проверка, что страница загружена (абстрактный метод, где каждая страница реализует свою проверку)

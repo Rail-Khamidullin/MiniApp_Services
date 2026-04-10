@@ -3,19 +3,23 @@ package com.pages.services.electricalWork;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.pages.BasePage;
+import io.qameta.allure.Step;
+
 import java.nio.file.Paths;
+
 import static com.utils.BasePageFactory.openPage;
 
 public class TypeElectricalWorkPage extends BasePage {
 
     // Локаторы (инициализируем в конструкторе)
-    private final Locator onMainButton;                               // кнопка "На главную"
-    private final Locator buttonBack;                                 // кнопка "Назад"
-    private final Locator buttonFurther;                              // кнопка "Далее"
-    private final Locator buttonLightingDevices;                      // кнопка "Приборы освещения"
-    private final Locator buttonDiagnostics;                          // кнопка "Диагностика электропроводки"
-    private final Locator buttonSwitches;                             // кнопка "Выключатели и розетки"
-    private final Locator buttonConsultation;                         // кнопка "Консультация по электромонтажным работам"
+    private final Locator onMainButton;                          // кнопка "На главную"
+    private final Locator buttonBack;                            // кнопка "Назад"
+    private final Locator buttonFurther;                         // кнопка "Далее"
+    private final Locator buttonLightingDevices;                 // кнопка "Приборы освещения"
+    private final Locator buttonDiagnostics;                     // кнопка "Диагностика электропроводки"
+    private final Locator buttonSwitches;                        // кнопка "Выключатели и розетки"
+    private final Locator buttonConsultation;                    // кнопка "Консультация по электромонтажным работам"
+    private final Locator header;                                // заголовок
 
     public TypeElectricalWorkPage(Page page) {
         super(page);
@@ -26,9 +30,11 @@ public class TypeElectricalWorkPage extends BasePage {
         this.buttonDiagnostics = nameLocator("Диагностика электропроводки");
         this.buttonSwitches = nameLocator("Выключатели и розетки");
         this.buttonConsultation = nameLocator("Консультация по электромонтажным работам");
+        this.header = nameLocator("Электромонтажные работы");
     }
 
     @Override
+    @Step("Проверка отображение объектов окна 'Электромонтажные работы'")
     public boolean isPageLoaded() {
         String locatorName = "Пусто";
         // Ждем появления кнопок (с таймаутом 10 секунд)
@@ -47,6 +53,8 @@ public class TypeElectricalWorkPage extends BasePage {
             buttonSwitches.waitFor(new Locator.WaitForOptions().setTimeout(10000));
             locatorName = "buttonConsultation";
             buttonConsultation.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            locatorName = "header";
+            header.waitFor(new Locator.WaitForOptions().setTimeout(10000));
 
             return true; // если исключения не было, элемент найден
         } catch (Exception e) {
@@ -58,8 +66,8 @@ public class TypeElectricalWorkPage extends BasePage {
     }
 
     // открыть страницу Приборы освещения
-    public LightingDevices tapToLightingDevices() {
+    public LightingDevicesPage tapToLightingDevices() {
         buttonLightingDevices.click();
-        return openPage(buttonFurther, page, LightingDevices.class);
+        return openPage(buttonFurther, page, LightingDevicesPage.class);
     }
 }

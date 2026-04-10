@@ -5,30 +5,33 @@ import com.microsoft.playwright.Page;
 import com.pages.BasePage;
 import io.qameta.allure.Step;
 import java.nio.file.Paths;
-import static com.data.TextHelpWindow.AGREEMENT_FILE;
-import static com.data.TextHelpWindow.MANUAL_FILE;
+import static com.data.TextHelpWindow.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AboutAppPage extends BasePage {
 
     private final Locator help;                     // заголовок 1 "Помощь"
-    private final Locator aboutApp;                 // заголовок 2 "О приложении"
+    private final Locator legalInformation;         // заголовок 2 "Правовая информация"
     private final Locator onMainButton;             // кнопка "На главную"
     private final Locator userManual;               // документ "Руководство пользователя"
     private final Locator agreementToProcessing;    // документ "Согласие на обработку ПД"
-    private final Locator headerManual;             // файл "О приложении"
+    private final Locator ecobonusesOffer;          // документ "Оферта Экобонусы
+    private final Locator headerUserManual;         // файл "Руководство пользователя"
     private final Locator headerAgreement;          // файл "Согласие на обработку ПД"
+    private final Locator headerOffer;              // файл "Оферта Экобонусы"
     private final Locator closeButtonFile;          // закрытие страницы файла "О приложении" или "Согласие на обработку ПД"
 
     public AboutAppPage(Page page) {
         super(page);
         this.help = page.locator("text='Помощь'");
-        this.aboutApp = page.locator("text='О приложении'");
+        this.legalInformation = page.locator("text='Правовая информация'");
         this.onMainButton = page.locator("text='На главную'");
         this.userManual = page.locator("text='Руководство пользователя'");
         this.agreementToProcessing = page.locator("text='Согласие на обработку ПД'");
-        this.headerManual = page.locator("//h2[contains(@class, 'MuiDialogTitle-root')]/p[contains(text(), 'Руководство пользователя')]");
+        this.ecobonusesOffer = page.locator("//button[contains(@class, 'MuiButtonBase-root') and contains(text(), 'Оферта Экобонусы')]");
+        this.headerUserManual = page.locator("//h2[contains(@class, 'MuiDialogTitle-root')]/p[contains(text(), 'Руководство пользователя')]");
         this.headerAgreement = page.locator("//h2[contains(@class, 'MuiDialogTitle-root')]/p[contains(text(), 'Согласие на обработку ПД')]");
+        this.headerOffer = page.locator("//p[contains(@class, 'MuiTypography-root') and contains(text(), 'Оферта Экобонусы')]");
         this.closeButtonFile = page.locator("//button[contains(@class, 'MuiIconButton-sizeMedium css-mfslm7')]");
     }
 
@@ -41,13 +44,15 @@ public class AboutAppPage extends BasePage {
             locatorName = "help";
             help.waitFor(new Locator.WaitForOptions().setTimeout(10000));
             locatorName = "aboutApp";
-            aboutApp.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            legalInformation.waitFor(new Locator.WaitForOptions().setTimeout(10000));
             locatorName = "onMainButton";
             onMainButton.waitFor(new Locator.WaitForOptions().setTimeout(10000));
             locatorName = "userManual";
             userManual.waitFor(new Locator.WaitForOptions().setTimeout(10000));
             locatorName = "agreementToProcessing";
             agreementToProcessing.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            locatorName = "ecobonusesOffer";
+            ecobonusesOffer.waitFor(new Locator.WaitForOptions().setTimeout(10000));
 
             return true; // если исключения не было, элемент найден
         } catch (Exception e) {
@@ -57,18 +62,20 @@ public class AboutAppPage extends BasePage {
         }
     }
 
-    @Step("Открытие документа 'Руководство пользователя'")
+    @Step("Открытие документов 'Руководство пользователя', 'Согласие на обработку ПД', 'Оферта Экобонусы'")
     public boolean openFile() {
-        if (checkFile(userManual, headerManual, MANUAL_FILE)) {
+        if (checkFile(userManual, headerUserManual, MANUAL_FILE)) {
             if (checkFile(agreementToProcessing, headerAgreement, AGREEMENT_FILE)) {
-                return true;
+                if (checkFile(ecobonusesOffer, headerOffer, ECOBONUS_OFFER)) {
+                    return true;
+                }
             }
         }
-        page.screenshot(new Page.ScreenshotOptions().setPath(Paths.get("screenshots/AboutAppPage/openManual.png")));
+        page.screenshot(new Page.ScreenshotOptions().setPath(Paths.get("screenshots/LegalInformation/openFile_error.png")));
         return false;
     }
 
-    @Step("Открытие документа 'Согласие на обработку ПД'")
+    @Step("Открытие документа")
     public boolean checkFile(Locator nameFile, Locator textHeader, String textExpend) {
         boolean fileIsOpen = true;
         nameFile.click();

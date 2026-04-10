@@ -14,7 +14,7 @@ public final class BasePageFactory {
         try {
             return pageClass.getDeclaredConstructor(Page.class).newInstance(page);
         } catch (Exception e) {
-            System.out.println("Элемент '"+ locator +"' не найден в '"+ pageClass +"'");
+            System.out.println("Элемент '" + locator + "' не найден в '" + pageClass + "'");
             throw new RuntimeException("Ошибка создания page object", e);
         }
     }

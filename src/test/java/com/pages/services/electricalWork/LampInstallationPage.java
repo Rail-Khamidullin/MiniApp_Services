@@ -3,11 +3,13 @@ package com.pages.services.electricalWork;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.pages.BasePage;
+import io.qameta.allure.Step;
 import java.nio.file.Paths;
 import static com.data.TextServices.*;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
+import static com.utils.BasePageFactory.openPage;
 
-public class LampInstallation extends BasePage {
+public class LampInstallationPage extends BasePage {
 
     // Локаторы (инициализируем в конструкторе)
     private final Locator onMainButton;                        // кнопка "На главную"
@@ -19,7 +21,7 @@ public class LampInstallation extends BasePage {
     private final Locator disclaimerBlock;                     // дисклеймер снизу
     private final Locator priceBlock;                          // блок с ценой
 
-    public LampInstallation(Page page) {
+    public LampInstallationPage(Page page) {
         super(page);
         this.onMainButton = nameLocator("На главную");
         this.buttonBack = page.locator("//div[contains(@id, 'header')]//button[contains(@class, 'MuiIconButton-root')]");
@@ -32,6 +34,7 @@ public class LampInstallation extends BasePage {
     }
 
     @Override
+    @Step("Проверка отображение объектов окна 'Установка бра'")
     public boolean isPageLoaded() {
         String locatorName = "Пусто";
         // Ждем появления кнопок (с таймаутом 10 секунд)
@@ -62,6 +65,7 @@ public class LampInstallation extends BasePage {
         }
     }
 
+    @Step("Проверка соответствия текста ФР и ОР")
     public boolean verifyContent() {
         try {
             // проверяем каждый элемент
@@ -77,5 +81,10 @@ public class LampInstallation extends BasePage {
                     .setPath(Paths.get("screenshots/TypeElectricalWorkPage/LightingDevices/verifyContent.png")));
             return false;
         }
+    }
+
+    // открыть страницу с оформлением заявки
+    public RegistrationApplicationPage tapToSubmitButton() {
+        return openPage(submitButton, page, RegistrationApplicationPage.class);
     }
 }

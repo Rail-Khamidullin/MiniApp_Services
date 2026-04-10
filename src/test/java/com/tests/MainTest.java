@@ -1,12 +1,13 @@
 package com.tests;
 
 import com.pages.MainPage;
+import com.tests.base.MobileBaseTest;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class MainTest extends BaseTest {
+public class MainTest extends MobileBaseTest {
 
     @Test
     @DisplayName("Открытие главного окна МиниАпп 'Услуги'")

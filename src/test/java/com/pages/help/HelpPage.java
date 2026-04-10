@@ -5,23 +5,21 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.TimeoutError;
 import com.pages.BasePage;
 import io.qameta.allure.Step;
-
 import java.nio.file.Paths;
-
 import static com.utils.BasePageFactory.openPage;
 
 public class HelpPage extends BasePage {
 
     private final Locator headerHelp;           // заголовок "Помощь"
     private final Locator askedQuestions;       // кнопка "Часто задаваемые вопросы"
-    private final Locator aboutApp;             // кнопка "О приложении"
+    private final Locator legalInformation;     // кнопка "Правовая информация"
     private final Locator onMainButton;         // кнопка "На главную"
 
     public HelpPage(Page page) {
         super(page);
         this.headerHelp = page.locator("text='Помощь'");
         this.askedQuestions = page.locator("text='Часто задаваемые вопросы'");
-        this.aboutApp = page.locator("text='О приложении'");
+        this.legalInformation = page.locator("text='Правовая информация'");
         this.onMainButton = page.locator("text='На главную'");
     }
 
@@ -36,7 +34,7 @@ public class HelpPage extends BasePage {
             locatorName = "askedQuestions";
             askedQuestions.waitFor(new Locator.WaitForOptions().setTimeout(10000));
             locatorName = "aboutApp";
-            aboutApp.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            legalInformation.waitFor(new Locator.WaitForOptions().setTimeout(10000));
             locatorName = "onMainButton";
             onMainButton.waitFor(new Locator.WaitForOptions().setTimeout(10000));
 
@@ -61,15 +59,15 @@ public class HelpPage extends BasePage {
         }
     }
 
-    // класс "О приложении"
+    // класс "Правовая информация"
     public AboutAppPage openAboutApp() {
         try {
-            return openPage(aboutApp, page, AboutAppPage.class);
+            return openPage(legalInformation, page, AboutAppPage.class);
         } catch (
                 TimeoutError e) {
-            System.out.println("Элемент 'О приложении' не найден на главной странице");
+            System.out.println("Элемент 'Правовая информация' не найден на главной странице");
             page.screenshot(new Page.ScreenshotOptions().setPath(Paths.get("screenshots/HelpPage/openAboutApp_error.png")));
-            throw new AssertionError("Не удалось открыть страницу О приложении", e);
+            throw new AssertionError("Не удалось открыть страницу 'Правовая информация'", e);
         }
     }
 }

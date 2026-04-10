@@ -4,6 +4,7 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.pages.BasePage;
 import com.pages.services.electricalWork.TypeElectricalWorkPage;
+import io.qameta.allure.Step;
 
 import java.nio.file.Paths;
 import static com.utils.BasePageFactory.openPage;
@@ -25,6 +26,7 @@ public class ServicesPage extends BasePage {
     }
 
     @Override
+    @Step("Проверка отображение объектов окна услуг")
     public boolean isPageLoaded() {
         String locatorName = "Пусто";
         // Ждем появления кнопок (с таймаутом 10 секунд)

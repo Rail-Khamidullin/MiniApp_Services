@@ -1,4 +1,4 @@
-package com.tests;
+package com.tests.base;
 
 import com.config.ConfigurationManager;
 import com.microsoft.playwright.Page;
