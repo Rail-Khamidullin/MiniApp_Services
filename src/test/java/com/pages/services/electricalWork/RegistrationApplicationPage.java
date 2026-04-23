@@ -1,13 +1,18 @@
 package com.pages.services.electricalWork;
 
+import com.api.GetServicesDate;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.pages.BasePage;
 import io.qameta.allure.Step;
+import io.restassured.response.Response;
+
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
+
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static com.utils.BasePageFactory.openPage;
 
@@ -30,7 +35,8 @@ public class RegistrationApplicationPage extends BasePage {
     private final Locator cancelTime;                    // отмена выбранного времен. интервала
     private final Locator comments;                      // поле для заполнения комментария
     private final Locator switchButton;                  // переключатель для использования бонусов в качестве оплаты
-
+    private SupportRegistrationPage supportRegistrationPage = new SupportRegistrationPage(page);
+    public String textComment;                           // текст, который будет добавлен в поле комментарий
 
     public RegistrationApplicationPage(Page page) {
         super(page);
@@ -77,60 +83,44 @@ public class RegistrationApplicationPage extends BasePage {
             locatorName = "submitButton";
             sendRequestButton.waitFor(new Locator.WaitForOptions().setTimeout(10000));
 
-            return true; // если исключения не было, элемент найден
+            return true;              // если исключения не было, элемент найден
         } catch (Exception e) {
             System.out.println("Элемент не найден: " + locatorName);
             // скриншот, в случае падения теста
             page.screenshot(new Page.ScreenshotOptions().setPath(Paths.get("screenshots/TypeElectricalWorkPage/LightingDevices/LampInstallationPage/RegistrationApplicationPage_error.png")));
-            return false; // элемент не найден за 10 секунд
+            return false;             // элемент не найден за 10 секунд
         }
     }
 
-    @Step("Оформление заявки")
+    @Step("Оформление заявки с использованием экобонусов")
     public WindowRegistrationCompletedPage sendRequest() {
-        dataField.click();                          // выбор поля с датой
-        int setDay = setDay(setNewMonth);           // получаем следующий день для выбора дня получения услуги
+        dataField.click();                                                            // выбор поля с датой
+        int setDay = supportRegistrationPage.setDay(setNewMonth);                     // получаем следующий день для выбора дня получения услуги
         page.locator("//button[contains(@class, 'MuiPickersDay-root') and text() = '" + setDay + "']").click();
-        okButton.click();                           // принимаем дату
-        setTimeInterval(timeField,
+        okButton.click();                                                             // принимаем дату
+        supportRegistrationPage.setTimeInterval(timeField,
                 "17:00",
-                setTime);                           // устанавливаем временной интервал
-        setTextInComment(comments.first());         // вводим комментарий
-        return openPage(sendRequestButton,          // выбираем кнопку "Отправить заявку"
+                setTime);                                                             // устанавливаем временной интервал
+        textComment = supportRegistrationPage.setTextInComment(comments.first());     // вводим комментарий
+        return openPage(sendRequestButton,                                            // выбираем кнопку "Отправить заявку"
                 page,
                 WindowRegistrationCompletedPage.class);
     }
 
-    @Step("Добавляем комментарий в поле с временем проведения тест кейса")
-    private void setTextInComment(Locator textField) {
-        LocalDateTime currentDateTime = LocalDateTime.now();
-        textField.fill("Автотест для проверки оформления заявки от '" + currentDateTime + "'");
-    }
+    @Step("Получение описания созданной заявки из БД")
+    public String getTextInBD() {
 
-    @Step("Установка временного интервала с выбором времени начала периода в формате чч:мм (09:00)")
-    public void setTimeInterval(Locator timeField, String timeBegin, Locator buttonSet) {
-        timeField.click();
-        Locator timeOption = page.locator("//div[@class='mbsc-timegrid-row']//div[contains(text(), '" + timeBegin + "')]");
-        assertThat(timeOption).isVisible();
-        timeOption.click();
-        // Подтверждение
-        buttonSet.click();
-        buttonSet.click();
-    }
+        try {
+            // Добавляем задержку перед запросом
+            page.waitForTimeout(3000);
 
-    @Step("Возвращаем следующий день после текущего, предварительно выбрав новый месяц (при необходим.)")
-    private Integer setDay(Locator newMonth) {
-        LocalDate currentDate = LocalDate.now();
-        int currentDay = currentDate.getDayOfMonth();
-
-        YearMonth currentMonth = YearMonth.now();
-        int daysInMonth = currentMonth.lengthOfMonth();
-        if (currentDay < daysInMonth) {
-            return currentDay + 1;
-        } else if (currentDay == daysInMonth) {
-            newMonth.click();
-            return 1;
+            GetServicesDate getServicesDate = new GetServicesDate();
+            String text = getServicesDate.getDescription(getServicesDate.servicesList());
+            System.out.println(text);
+            return text;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "Ошибка при получении данных: " + e.getMessage();
         }
-        return null;
     }
 }

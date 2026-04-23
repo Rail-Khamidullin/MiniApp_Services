@@ -2,6 +2,7 @@ package com.tests.base;
 
 import com.config.Configuration;
 import com.microsoft.playwright.*;
+import com.utils.TokenAuthorization;
 import org.junit.jupiter.api.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -10,6 +11,7 @@ public class MobileBaseTest {
     protected Browser browser;
     protected BrowserContext context;
     protected Page page;
+    public static String TOKEN;
 
     private static final Configuration CONFIG = new Configuration();
 
@@ -18,6 +20,7 @@ public class MobileBaseTest {
         playwright = Playwright.create();
         browser = playwright.chromium().launch(new BrowserType.LaunchOptions()
                 .setHeadless(false));
+        TOKEN = TokenAuthorization.getToken();
     }
 
     @BeforeEach

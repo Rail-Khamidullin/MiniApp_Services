@@ -1,0 +1,26 @@
+{
+  "applications": [
+    {
+      "id": "295ca0f6-09ee-4959-868f-ecf0839daaca",
+      "number": 9134,
+      "name": "Установка бра",
+      "statusApplication": "Новое",
+      "client": "Сметанин Кирилл Олегович",
+      "clientPhone": "+79211079002",
+      "clientType": "ФЛ",
+      "priorityApplication": "Платная",
+      "proposalStatus": "Требует оплаты",
+      "planExecutionDate": "2026-04-11 17:30:00.000",
+      "description": "Комментарий клиента: Автотест для проверки оформления заявки",
+      "domaNumber": 799502
+    }
+  ],
+  "pagination": {
+    "pageNumber": 0,
+    "pageSize": 25,
+    "totalElements": 6993,
+    "totalPages": 280,
+    "first": true,
+    "last": false
+  }
+}

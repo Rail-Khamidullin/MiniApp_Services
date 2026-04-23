@@ -41,5 +41,10 @@ public class ServicesVisibleTest extends MobileBaseTest {
         // объект WindowRegistrationCompletedPage
         WindowRegistrationCompletedPage windowRegistrationCompletedPage = registrationApplicationPage.sendRequest();
         assertTrue(windowRegistrationCompletedPage.isPageLoaded(), "Успешное оформление заявки на услугу");
+
+        // проверка соответствия комментария с информацией в БД
+        String actualComment = registrationApplicationPage.textComment;
+        String fact = registrationApplicationPage.getTextInBD();
+        assertTrue(fact.contains(actualComment), "Текст комментария НЕ совпадает с БД");
     }
 }
