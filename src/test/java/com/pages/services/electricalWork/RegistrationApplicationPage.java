@@ -1,22 +1,18 @@
 package com.pages.services.electricalWork;
 
-import com.api.GetServicesDate;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.pages.BasePage;
+import com.pages.services.enums.BonusOption;
 import io.qameta.allure.Step;
-import io.restassured.response.Response;
-
-import java.io.IOException;
 import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.YearMonth;
-
-import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static com.utils.BasePageFactory.openPage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RegistrationApplicationPage extends BasePage {
+
+    private static final Logger logger = LoggerFactory.getLogger(RegistrationApplicationPage.class);
 
     // Локаторы (инициализируем в конструкторе)
     private final Locator onMainButton;                  // кнопка "На главную"
@@ -25,6 +21,8 @@ public class RegistrationApplicationPage extends BasePage {
     private final Locator header;                        // заголовок
     private final Locator sendRequestButton;             // кнопка "Оформить заявку"
     private final Locator quantityBonus;                 // кол-во экобонусов
+    private final Locator willAddBonus;                  // кол-во экобонусов, которые начислятся после оформления
+    private final Locator useBonus;                      // кол-во экобонусов для использования
     private final Locator dataField;                     // поле с выбором даты выпол. заявки
     private final Locator timeField;                     // поле с выбором времени заявки
     private final Locator setNewMonth;                   // кнопка выбора следующего месяца
@@ -37,6 +35,7 @@ public class RegistrationApplicationPage extends BasePage {
     private final Locator switchButton;                  // переключатель для использования бонусов в качестве оплаты
     private SupportRegistrationPage supportRegistrationPage = new SupportRegistrationPage(page);
     public String textComment;                           // текст, который будет добавлен в поле комментарий
+    public Double currentBonuses;                        // кол-во бонусов после оформления услуги
 
     public RegistrationApplicationPage(Page page) {
         super(page);
@@ -46,6 +45,8 @@ public class RegistrationApplicationPage extends BasePage {
         this.header = nameLocator("Оформление заявки");
         this.sendRequestButton = nameLocator("Отправить заявку");
         this.quantityBonus = page.locator("//div[contains(@class, 'MuiBox-root')]//div[@class = 'css-mgcte9']//p[contains(@class, 'MuiTypography-body1')]");
+        this.willAddBonus = page.locator("//div[@class = 'css-rpim9t']//p[contains(@class, 'css-1q8gi9y')]");
+        this.useBonus = page.locator("//span[@class = 'css-1xqhkmm']");
         this.dataField = page.locator("//div[contains(@class, 'MuiPickersInputBase-sectionsContainer')]");
         this.timeField = page.locator("//input[@class ='css-2qh9zc']");
         this.setNewMonth = page.locator("//div[contains(@class, 'MuiPickersArrowSwitcher-root')]//button[contains(@class, 'MuiPickersArrowSwitcher-nextIconButton')]");
@@ -85,42 +86,47 @@ public class RegistrationApplicationPage extends BasePage {
 
             return true;              // если исключения не было, элемент найден
         } catch (Exception e) {
-            System.out.println("Элемент не найден: " + locatorName);
+            logger.error("Элемент не найден: {}", locatorName);
             // скриншот, в случае падения теста
             page.screenshot(new Page.ScreenshotOptions().setPath(Paths.get("screenshots/TypeElectricalWorkPage/LightingDevices/LampInstallationPage/RegistrationApplicationPage_error.png")));
             return false;             // элемент не найден за 10 секунд
         }
     }
 
-    @Step("Оформление заявки с использованием экобонусов")
-    public WindowRegistrationCompletedPage sendRequest() {
+    @Step("Оформление заявки")
+    public WindowRegistrationCompletedPage registrationWithBonus(BonusOption bonusOption, String time) {
+        if (bonusOption == BonusOption.NOT_USE_BONUSES) {
+            switchButton.click();                                                     // отключаем использование бонусов
+        }
         dataField.click();                                                            // выбор поля с датой
         int setDay = supportRegistrationPage.setDay(setNewMonth);                     // получаем следующий день для выбора дня получения услуги
-        page.locator("//button[contains(@class, 'MuiPickersDay-root') and text() = '" + setDay + "']").click();
+        page.locator("button[role='gridcell']:text-is('" + setDay + "'):not([disabled])").click();
         okButton.click();                                                             // принимаем дату
         supportRegistrationPage.setTimeInterval(timeField,
-                "17:00",
-                setTime);                                                             // устанавливаем временной интервал
+                time,
+                setTime);                                                             // устанавливаем временной интервал в формате 09:30
         textComment = supportRegistrationPage.setTextInComment(comments.first());     // вводим комментарий
+        currentBonuses = futureBonuses();
         return openPage(sendRequestButton,                                            // выбираем кнопку "Отправить заявку"
                 page,
                 WindowRegistrationCompletedPage.class);
     }
 
-    @Step("Получение описания созданной заявки из БД")
-    public String getTextInBD() {
-
-        try {
-            // Добавляем задержку перед запросом
-            page.waitForTimeout(3000);
-
-            GetServicesDate getServicesDate = new GetServicesDate();
-            String text = getServicesDate.getDescription(getServicesDate.servicesList());
-            System.out.println(text);
-            return text;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "Ошибка при получении данных: " + e.getMessage();
+    // считаем будущее количество бонусов после оформления услуги
+    private Double futureBonuses () {
+        if (quantityBonus.count() > 0 || useBonus.count() > 0 || willAddBonus.count() > 0) {
+            try {
+                Double allBonuses = Double.parseDouble(quantityBonus.textContent());   // текущее кол-во бонусов
+                Double useBonuses = Double.parseDouble(useBonus.textContent());        // используемое кол-во бонусов
+//                Double newBonuses = Double.parseDouble(willAddBonus.textContent());  // кол-во бонусов кэшбэком
+//                Double current = allBonuses - useBonuses + newBonuses;
+                Double current = allBonuses - useBonuses;
+                logger.info("Registration = {}", current);
+                return current;
+            } catch (Exception e) {
+                return 0.0;
+            }
         }
+        return 0.0;
     }
 }

@@ -16,7 +16,8 @@ public class MainPage extends BasePage {
     private final Locator buttonHelp;             // кнопка "Помощь"
     private final Locator buttonServices;         // кнопка "Услуги"
     private final Locator buttonMyApplications;   // кнопка "Мои заявки"
-    private final Locator currentBonuses;
+    private final Locator currentBonuses;         // кол-во экобонусов
+
 
     public MainPage(Page page) {
         super(page);
@@ -66,8 +67,8 @@ public class MainPage extends BasePage {
     }
 
     @Step("Фиксируаем текущее кол-во бонусов")
-    public int getCurrentBonuses() {
-        currentBonuses.textContent();
-        return 0;
+    public Double getCurrentBonuses() {
+        System.out.println("Main = " + Double.parseDouble(currentBonuses.textContent()));
+        return Double.parseDouble(currentBonuses.textContent());
     }
 }

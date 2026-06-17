@@ -5,9 +5,7 @@ import com.microsoft.playwright.Page;
 import com.pages.BasePage;
 import com.pages.MainPage;
 import io.qameta.allure.Step;
-
 import java.nio.file.Paths;
-
 import static com.utils.BasePageFactory.openPage;
 
 public class WindowRegistrationCompletedPage extends BasePage {
