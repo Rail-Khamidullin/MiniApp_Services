@@ -5,16 +5,20 @@ import com.microsoft.playwright.Page;
 import com.pages.BasePage;
 import com.pages.services.enums.BonusOption;
 import io.qameta.allure.Step;
+
 import java.nio.file.Paths;
+
 import static com.utils.BasePageFactory.openPage;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class RegistrationApplicationPage extends BasePage {
 
+    // логирование
     private static final Logger logger = LoggerFactory.getLogger(RegistrationApplicationPage.class);
 
-    // Локаторы (инициализируем в конструкторе)
+    // локаторы (инициализируем в конструкторе)
     private final Locator onMainButton;                  // кнопка "На главную"
     private final Locator buttonBack;                    // кнопка "Назад"
     private final Locator mainHeader;                    // главный заголовок "Оформление заявки"
@@ -61,29 +65,22 @@ public class RegistrationApplicationPage extends BasePage {
 
     @Override
     @Step("Проверка отображение объектов окна 'Услуги'")
-    public boolean isPageLoaded() {
+    public boolean isPageLoaded(int timeout) {
         String locatorName = "Пусто";
         // Ждем появления кнопок (с таймаутом 10 секунд)
         try {
             locatorName = "onMainButton";
-            onMainButton.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            onMainButton.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "buttonBack";
-            buttonBack.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            buttonBack.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "mainHeader";
-            mainHeader.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            mainHeader.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "header";
-            header.waitFor(new Locator.WaitForOptions().setTimeout(10000));
-            locatorName = "quantityBonus";
-            quantityBonus.waitFor(new Locator.WaitForOptions().setTimeout(10000));
-            locatorName = "dataField";
-            dataField.waitFor(new Locator.WaitForOptions().setTimeout(10000));
-            locatorName = "timeField";
-            timeField.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            header.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "comments";
-            comments.first().waitFor(new Locator.WaitForOptions().setTimeout(10000));
-            locatorName = "submitButton";
-            sendRequestButton.waitFor(new Locator.WaitForOptions().setTimeout(10000));
-
+            comments.first().waitFor(new Locator.WaitForOptions().setTimeout(timeout));
+            locatorName = "sendRequestButton";
+            sendRequestButton.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             return true;              // если исключения не было, элемент найден
         } catch (Exception e) {
             logger.error("Элемент не найден: {}", locatorName);
@@ -98,10 +95,7 @@ public class RegistrationApplicationPage extends BasePage {
         if (bonusOption == BonusOption.NOT_USE_BONUSES) {
             switchButton.click();                                                     // отключаем использование бонусов
         }
-        dataField.click();                                                            // выбор поля с датой
-        int setDay = supportRegistrationPage.setDay(setNewMonth);                     // получаем следующий день для выбора дня получения услуги
-        page.locator("button[role='gridcell']:text-is('" + setDay + "'):not([disabled])").click();
-        okButton.click();                                                             // принимаем дату
+        setDate();                                                                    // устанавливаем дату
         supportRegistrationPage.setTimeInterval(timeField,
                 time,
                 setTime);                                                             // устанавливаем временной интервал в формате 09:30
@@ -112,8 +106,16 @@ public class RegistrationApplicationPage extends BasePage {
                 WindowRegistrationCompletedPage.class);
     }
 
-    // считаем будущее количество бонусов после оформления услуги
-    private Double futureBonuses () {
+    @Step("Выбор даты")
+    private void setDate() {
+        dataField.click();                                                            // выбор поля с датой
+        int setDay = supportRegistrationPage.setDay(setNewMonth);                     // получаем следующий день для выбора дня получения услуги
+        page.locator("button[role='gridcell']:text-is('" + setDay + "'):not([disabled])").click();
+        okButton.click();                                                             // принимаем дату
+    }
+
+    @Step("Подсчёт будущего количества бонусов после оформления услуги")
+    private Double futureBonuses() {
         if (quantityBonus.count() > 0 || useBonus.count() > 0 || willAddBonus.count() > 0) {
             try {
                 Double allBonuses = Double.parseDouble(quantityBonus.textContent());   // текущее кол-во бонусов

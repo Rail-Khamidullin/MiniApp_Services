@@ -13,7 +13,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ServicesVisibleTest extends MobileBaseTest {
+public class OrderPaidServiceTest extends MobileBaseTest {
 
     @ParameterizedTest
     @CsvSource({
@@ -26,31 +26,31 @@ public class ServicesVisibleTest extends MobileBaseTest {
 
         MainPage mainPage = new MainPage(page);
         ServicesPage servicesPage = mainPage.tapToServices();
-        assertTrue(servicesPage.isPageLoaded(), "Окно 'Услуги' не загрузилось");
+        assertTrue(servicesPage.isPageLoaded(10000), "Окно 'Услуги' не загрузилось");
 
         // объект TypeElectricalWorkPage
         TypeElectricalWorkPage electricalWorkPage = servicesPage.tapToConcreteService();
-        assertTrue(electricalWorkPage.isPageLoaded(), "Окно 'Электромонтажные работы' не загрузилось");
+        assertTrue(electricalWorkPage.isPageLoaded(10000), "Окно 'Электромонтажные работы' не загрузилось");
 
         // объект LightingDevices
         LightingDevicesPage lightingDevicesPage = electricalWorkPage.tapToLightingDevices();
-        assertTrue(lightingDevicesPage.isPageLoaded(), "Окно 'Приборы освещения' не загрузилось");
+        assertTrue(lightingDevicesPage.isPageLoaded(10000), "Окно 'Приборы освещения' не загрузилось");
 
         // объект LampInstallation
         LampInstallationPage lampInstallationPage = lightingDevicesPage.tapToLampInstallation();
-        assertTrue(lampInstallationPage.isPageLoaded(), "Окно 'Установка бра' не загрузилось");
+        assertTrue(lampInstallationPage.isPageLoaded(10000), "Окно 'Установка бра' не загрузилось");
         // проверяем контент
         assertTrue(lampInstallationPage.verifyContent(), "Описание услуги 'Установка бра' не верное");
 
         // объект LampInstallation
         RegistrationApplicationPage registrationApplicationPage = lampInstallationPage.tapToSubmitButton();
-        assertTrue(registrationApplicationPage.isPageLoaded(), "Окно 'Оформление заявки' услуги 'Установка бра' не загрузилась");
+        assertTrue(registrationApplicationPage.isPageLoaded(10000), "Окно 'Оформление заявки' услуги 'Установка бра' не загрузилась");
 
         // объект WindowRegistrationCompletedPage
         WindowRegistrationCompletedPage windowRegistrationCompletedPage =
                 registrationApplicationPage.registrationWithBonus(bonusOption, time);
         Double currentBonuses = registrationApplicationPage.currentBonuses;   // берём текущее кол-во бонусов
-        assertTrue(windowRegistrationCompletedPage.isPageLoaded(), "Успешное оформление заявки на услугу");
+        assertTrue(windowRegistrationCompletedPage.isPageLoaded(10000), "Успешное оформление заявки на услугу");
 
         // проверка соответствия комментария с информацией в БД
         String actualComment = registrationApplicationPage.textComment;

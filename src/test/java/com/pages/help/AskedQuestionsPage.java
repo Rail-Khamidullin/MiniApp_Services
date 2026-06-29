@@ -33,24 +33,24 @@ public class AskedQuestionsPage extends BasePage {
 
     @Override
     @Step("Проверка отображения всех элементов окна 'Часто задаваемые вопросы'")
-    public boolean isPageLoaded() {
+    public boolean isPageLoaded(int timeout) {
         String locatorName = "Пусто";
         // Ждем появления кнопок (с таймаутом 10 секунд)
         try {
             locatorName = "help";
-            help.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            help.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "askedQuestions";
-            askedQuestions.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            askedQuestions.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "questionOne";
-            questionOne.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            questionOne.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "questionTwo";
-            questionTwo.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            questionTwo.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "questionThree";
-            questionThree.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            questionThree.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "questionFore";
-            questionFore.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            questionFore.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "onMainButton";
-            onMainButton.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            onMainButton.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
 
             return true; // если исключения не было, элемент найден
         } catch (Exception e) {

@@ -17,5 +17,5 @@ public abstract class BasePage {
     }
 
     // Проверка, что страница загружена (абстрактный метод, где каждая страница реализует свою проверку)
-    public abstract boolean isPageLoaded();
+    public abstract boolean isPageLoaded(int timeout);
 }

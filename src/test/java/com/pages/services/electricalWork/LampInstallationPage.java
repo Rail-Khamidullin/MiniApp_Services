@@ -35,26 +35,26 @@ public class LampInstallationPage extends BasePage {
 
     @Override
     @Step("Проверка отображение объектов окна 'Установка бра'")
-    public boolean isPageLoaded() {
+    public boolean isPageLoaded(int timeout) {
         String locatorName = "Пусто";
         // Ждем появления кнопок (с таймаутом 10 секунд)
         try {
             locatorName = "onMainButton";
-            onMainButton.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            onMainButton.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "buttonBack";
-            buttonBack.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            buttonBack.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "mainHeader";
-            mainHeader.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            mainHeader.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "header";
-            header.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            header.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "descriptionBlock";
-            descriptionBlock.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            descriptionBlock.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "submitButton";
-            submitButton.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            submitButton.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "disclaimerBlock";
-            disclaimerBlock.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            disclaimerBlock.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "priceBlock";
-            priceBlock.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            priceBlock.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
 
             return true; // если исключения не было, элемент найден
         } catch (Exception e) {

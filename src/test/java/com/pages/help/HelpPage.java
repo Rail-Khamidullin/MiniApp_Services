@@ -25,18 +25,18 @@ public class HelpPage extends BasePage {
 
     @Override
     @Step("Отображение элементов страницы Помощь")
-    public boolean isPageLoaded() {
+    public boolean isPageLoaded(int timeout) {
         String locatorName = "Пусто";
         // Ждем появления кнопок (с таймаутом 10 секунд)
         try {
             locatorName = "headerHelp";
-            headerHelp.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            headerHelp.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "askedQuestions";
-            askedQuestions.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            askedQuestions.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "aboutApp";
-            legalInformation.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            legalInformation.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "onMainButton";
-            onMainButton.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            onMainButton.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
 
             return true; // если исключения не было, элемент найден
         } catch (Exception e) {

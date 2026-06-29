@@ -26,18 +26,18 @@ public class WindowRegistrationCompletedPage extends BasePage {
 
     @Override
     @Step("Проверка отображение объектов успешного оформления услуги")
-    public boolean isPageLoaded() {
+    public boolean isPageLoaded(int timeout) {
         String locatorName = "Пусто";
         // Ждем появления кнопок (с таймаутом 10 секунд)
         try {
             locatorName = "goToServiceButton";
-            goToServiceButton.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            goToServiceButton.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "onMainButton";
-            onMainButton.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            onMainButton.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "buttonBack";
-            buttonBack.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            buttonBack.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "checkRegistration";
-            checkRegistration.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            checkRegistration.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
 
             return true; // если исключения не было, элемент найден
         } catch (Exception e) {

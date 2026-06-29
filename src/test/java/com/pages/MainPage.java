@@ -30,21 +30,21 @@ public class MainPage extends BasePage {
 
     @Override
     @Step("МиниАпп 'Услуги' отображается")
-    public boolean isPageLoaded() {
+    public boolean isPageLoaded(int timeout) {
 
         String locatorName = "Пусто";
         // Ждем появления кнопок (с таймаутом 10 секунд)
         try {
             locatorName = "ecoBonuses";
-            ecoBonuses.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            ecoBonuses.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "buttonHelp";
-            buttonHelp.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            buttonHelp.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "buttonServices";
-            buttonServices.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            buttonServices.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "buttonMyApplications";
-            buttonMyApplications.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            buttonMyApplications.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "quantityBonus";
-            currentBonuses.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            currentBonuses.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
 
             return true; // если исключения не было, элемент найден
         } catch (TimeoutError e) {

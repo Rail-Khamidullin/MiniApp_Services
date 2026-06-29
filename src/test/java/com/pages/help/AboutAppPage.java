@@ -37,22 +37,22 @@ public class AboutAppPage extends BasePage {
 
     @Override
     @Step("Проверка отображения всех элементов окна 'Часто задаваемые вопросы'")
-    public boolean isPageLoaded() {
+    public boolean isPageLoaded(int timeout) {
         String locatorName = "Пусто";
         // Ждем появления кнопок (с таймаутом 10 секунд)
         try {
             locatorName = "help";
-            help.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            help.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "aboutApp";
-            legalInformation.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            legalInformation.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "onMainButton";
-            onMainButton.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            onMainButton.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "userManual";
-            userManual.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            userManual.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "agreementToProcessing";
-            agreementToProcessing.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            agreementToProcessing.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "ecobonusesOffer";
-            ecobonusesOffer.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            ecobonusesOffer.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
 
             return true; // если исключения не было, элемент найден
         } catch (Exception e) {

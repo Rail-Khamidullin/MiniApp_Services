@@ -19,7 +19,7 @@ public class HelpTest extends MobileBaseTest {
         assertTrue(mainPage.tapToHelp().isPageLoaded(),
                 "Окно 'Помощь' не загрузилось");
         // Проверяем отображение окна 'Часто задаваемые вопросы'
-        assertTrue(mainPage.tapToHelp().openAskedQuestions().isPageLoaded(),
+        assertTrue(mainPage.tapToHelp().openAskedQuestions().isPageLoaded(10000),
                 "Окно 'Часто задаваемые вопросы' не загрузилось");
         // Проверяем работу кнопок с вопросами окна 'Часто задаваемые вопросы'
         assertTrue(mainPage.tapToHelp().openAskedQuestions().openCloseQuestion(),
@@ -33,10 +33,10 @@ public class HelpTest extends MobileBaseTest {
         // Создаем объект главного окна МиниАпп "Услуги"
         MainPage mainPage = new MainPage(page);
         // Проверяем отображение блока 'Помощь'
-        assertTrue(mainPage.tapToHelp().isPageLoaded(),
+        assertTrue(mainPage.tapToHelp().isPageLoaded(10000),
                 "Окно 'Помощь' не загрузилось");
         // Проверяем отображение окна 'Правовая информация'
-        assertTrue(mainPage.tapToHelp().openAboutApp().isPageLoaded(),
+        assertTrue(mainPage.tapToHelp().openAboutApp().isPageLoaded(10000),
                 "Окно 'Правовая информация' не загрузилось");
         // Проверяем открытие файлов окна 'Правовая информация'
         assertTrue(mainPage.tapToHelp().openAboutApp().openFile(), "Документы окна 'Правовая информация' не отображается");

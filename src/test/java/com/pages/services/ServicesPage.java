@@ -27,18 +27,18 @@ public class ServicesPage extends BasePage {
 
     @Override
     @Step("Проверка отображение объектов окна услуг")
-    public boolean isPageLoaded() {
+    public boolean isPageLoaded(int timeout) {
         String locatorName = "Пусто";
         // Ждем появления кнопок (с таймаутом 10 секунд)
         try {
             locatorName = "headerServices";
-            headerServices.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            headerServices.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "onMainButton";
-            onMainButton.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            onMainButton.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "buttonBack";
-            buttonBack.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            buttonBack.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
             locatorName = "electricalWork";
-            electricalWork.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            electricalWork.waitFor(new Locator.WaitForOptions().setTimeout(timeout));
 
             return true; // если исключения не было, элемент найден
         } catch (Exception e) {

@@ -17,7 +17,7 @@ public class MainTest extends MobileBaseTest {
         MainPage mainPage = new MainPage(page);
 
         // Проверяем отображение 'Каталог услуг' в блоке 'Услуги'
-        assertTrue(mainPage.isPageLoaded(),
+        assertTrue(mainPage.isPageLoaded(10000),
                 "Страница 'Услуг' не загрузилась");
     }
 }
