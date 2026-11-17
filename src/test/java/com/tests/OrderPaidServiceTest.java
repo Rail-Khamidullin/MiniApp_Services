@@ -48,7 +48,7 @@ public class OrderPaidServiceTest extends MobileBaseTest {
 
         // объект WindowRegistrationCompletedPage
         WindowRegistrationCompletedPage windowRegistrationCompletedPage =
-                registrationApplicationPage.registrationWithBonus(bonusOption, time);
+                registrationApplicationPage.registrationAndBonus(bonusOption, time);
         Double currentBonuses = registrationApplicationPage.currentBonuses;   // берём текущее кол-во бонусов
         assertTrue(windowRegistrationCompletedPage.isPageLoaded(10000), "Успешное оформление заявки на услугу");
 

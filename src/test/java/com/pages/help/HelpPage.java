@@ -4,11 +4,18 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.TimeoutError;
 import com.pages.BasePage;
+import com.pages.services.electricalWork.RegistrationApplicationPage;
 import io.qameta.allure.Step;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.nio.file.Paths;
 import static com.utils.BasePageFactory.openPage;
 
 public class HelpPage extends BasePage {
+
+    // логирование
+    private static final Logger logger = LoggerFactory.getLogger(RegistrationApplicationPage.class);
 
     private final Locator headerHelp;           // заголовок "Помощь"
     private final Locator askedQuestions;       // кнопка "Часто задаваемые вопросы"
@@ -69,5 +76,23 @@ public class HelpPage extends BasePage {
             page.screenshot(new Page.ScreenshotOptions().setPath(Paths.get("screenshots/HelpPage/openAboutApp_error.png")));
             throw new AssertionError("Не удалось открыть страницу 'Правовая информация'", e);
         }
+    }
+
+    @Step("Подсчёт будущего количества бонусов после оформления услуги")
+    public static Double futureBonuses(Locator quantityBonus, Locator useBonus, Locator willAddBonus) {
+        if (quantityBonus.count() > 0 || useBonus.count() > 0 || willAddBonus.count() > 0) {
+            try {
+                Double allBonuses = Double.parseDouble(quantityBonus.textContent());   // текущее кол-во бонусов
+                Double useBonuses = Double.parseDouble(useBonus.textContent());        // используемое кол-во бонусов
+//                Double newBonuses = Double.parseDouble(willAddBonus.textContent());  // кол-во бонусов кэшбэком
+//                Double current = allBonuses - useBonuses + newBonuses;
+                Double current = allBonuses - useBonuses;
+                logger.info("Registration = {}", current);
+                return current;
+            } catch (Exception e) {
+                return 0.0;
+            }
+        }
+        return 0.0;
     }
 }

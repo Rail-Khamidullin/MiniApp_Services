@@ -16,7 +16,7 @@ public class HelpTest extends MobileBaseTest {
         // Создаем объект главного окна МиниАпп "Услуги"
         MainPage mainPage = new MainPage(page);
         // Проверяем отображение блока 'Помощь'
-        assertTrue(mainPage.tapToHelp().isPageLoaded(),
+        assertTrue(mainPage.tapToHelp().isPageLoaded(10000),
                 "Окно 'Помощь' не загрузилось");
         // Проверяем отображение окна 'Часто задаваемые вопросы'
         assertTrue(mainPage.tapToHelp().openAskedQuestions().isPageLoaded(10000),

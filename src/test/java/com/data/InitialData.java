@@ -7,5 +7,5 @@ public class InitialData {
 
     // персональные данные для авторизации пользователя (админ)
     public static final String LOGIN = "RHamidulin@sbercity.ru";
-    public static final String PASSWORD = "Adelina3905Adelina";
+    public static final String PASSWORD = "JI7Wa@xiVuj!FQHtifK3J#-To";
 }

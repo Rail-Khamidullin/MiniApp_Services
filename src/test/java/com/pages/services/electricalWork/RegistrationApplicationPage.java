@@ -5,11 +5,9 @@ import com.microsoft.playwright.Page;
 import com.pages.BasePage;
 import com.pages.services.enums.BonusOption;
 import io.qameta.allure.Step;
-
 import java.nio.file.Paths;
-
+import static com.pages.help.HelpPage.futureBonuses;
 import static com.utils.BasePageFactory.openPage;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +35,7 @@ public class RegistrationApplicationPage extends BasePage {
     private final Locator cancelTime;                    // отмена выбранного времен. интервала
     private final Locator comments;                      // поле для заполнения комментария
     private final Locator switchButton;                  // переключатель для использования бонусов в качестве оплаты
+
     private SupportRegistrationPage supportRegistrationPage = new SupportRegistrationPage(page);
     public String textComment;                           // текст, который будет добавлен в поле комментарий
     public Double currentBonuses;                        // кол-во бонусов после оформления услуги
@@ -91,7 +90,7 @@ public class RegistrationApplicationPage extends BasePage {
     }
 
     @Step("Оформление заявки")
-    public WindowRegistrationCompletedPage registrationWithBonus(BonusOption bonusOption, String time) {
+    public WindowRegistrationCompletedPage registrationAndBonus(BonusOption bonusOption, String time) {
         if (bonusOption == BonusOption.NOT_USE_BONUSES) {
             switchButton.click();                                                     // отключаем использование бонусов
         }
@@ -100,7 +99,7 @@ public class RegistrationApplicationPage extends BasePage {
                 time,
                 setTime);                                                             // устанавливаем временной интервал в формате 09:30
         textComment = supportRegistrationPage.setTextInComment(comments.first());     // вводим комментарий
-        currentBonuses = futureBonuses();
+        currentBonuses = futureBonuses(quantityBonus, useBonus, willAddBonus);        // подсчёт будущего кол-ва бонусов
         return openPage(sendRequestButton,                                            // выбираем кнопку "Отправить заявку"
                 page,
                 WindowRegistrationCompletedPage.class);
@@ -112,23 +111,5 @@ public class RegistrationApplicationPage extends BasePage {
         int setDay = supportRegistrationPage.setDay(setNewMonth);                     // получаем следующий день для выбора дня получения услуги
         page.locator("button[role='gridcell']:text-is('" + setDay + "'):not([disabled])").click();
         okButton.click();                                                             // принимаем дату
-    }
-
-    @Step("Подсчёт будущего количества бонусов после оформления услуги")
-    private Double futureBonuses() {
-        if (quantityBonus.count() > 0 || useBonus.count() > 0 || willAddBonus.count() > 0) {
-            try {
-                Double allBonuses = Double.parseDouble(quantityBonus.textContent());   // текущее кол-во бонусов
-                Double useBonuses = Double.parseDouble(useBonus.textContent());        // используемое кол-во бонусов
-//                Double newBonuses = Double.parseDouble(willAddBonus.textContent());  // кол-во бонусов кэшбэком
-//                Double current = allBonuses - useBonuses + newBonuses;
-                Double current = allBonuses - useBonuses;
-                logger.info("Registration = {}", current);
-                return current;
-            } catch (Exception e) {
-                return 0.0;
-            }
-        }
-        return 0.0;
     }
 }

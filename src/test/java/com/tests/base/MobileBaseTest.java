@@ -1,9 +1,11 @@
 package com.tests.base;
 
 import com.config.Configuration;
+import com.cookies.CookiesLoader;
 import com.microsoft.playwright.*;
 import com.utils.TokenAuthorization;
 import org.junit.jupiter.api.*;
+import java.nio.file.Path;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class MobileBaseTest {
@@ -34,12 +36,15 @@ public class MobileBaseTest {
                 .setLocale("ru-RU")
                 .setTimezoneId("Europe/Moscow")
         );
+
+        // 🔽 Подгружаем cookies из JSON
+        CookiesLoader.loadFromFile(context, Path.of("src/test/resources/cookies"));
         page = context.newPage();
         page.navigate(getBaseUrl());
     }
 
     private static String getBaseUrl() {
-        return CONFIG.getProperty("base.url", "http://someurl.ru");
+        return CONFIG.getProperty("base.url", "https://m.d.doma.ai/");
     }
 
     @AfterEach

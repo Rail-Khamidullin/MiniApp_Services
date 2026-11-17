@@ -1,0 +1,55 @@
+{
+  "cookies": [
+    {
+      "name": "spid",
+      "value": "1791808411983_7fb836fb8830a6216888894b12f53eb9_6eg4bai8ng5eawhe",
+      "domain": "m.d.doma.ai",
+      "path": "/",
+      "expires": 1826368411.945835,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "fingerprint",
+      "value": "a1c3f3c042844e0288d109269a84e8e7",
+      "domain": "m.d.doma.ai",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "NEXT_LOCALE",
+      "value": "ru-RU",
+      "domain": "m.d.doma.ai",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "ph_phc_DiQ4OKTFQjK7s9qEKWe6EDtKMawhH9IKW0es6Ni2Al6_posthog",
+      "value": "%7B%22%24device_id%22%3A%2201a1301a-9df2-75b4-9f51-3d52171f0603%22%2C%22distinct_id%22%3A%2201a1301a-9df2-75b4-9f51-3d52171f0603%22%2C%22%24sesid%22%3A%5B1791808413507%2C%2201a1301a-9f44-7ae9-b6de-f5cdd103d6ee%22%2C1791808413507%5D%2C%22%24user_state%22%3A%22anonymous%22%7D",
+      "domain": ".doma.ai",
+      "path": "/",
+      "expires": 1823344413,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "https://m.d.doma.ai",
+      "localStorage": [
+        {
+          "name": "__anon_id",
+          "value": "\"a27125fe-cdf3-4b71-a6f4-b2e93fd97fc9\""
+        }
+      ]
+    }
+  ]
+}
